@@ -14,6 +14,7 @@ html,
 body {
   height: 100%;
   margin: 0;
+  overflow: hidden;
 }
 
 .layout {
@@ -31,22 +32,28 @@ body {
     "sidebar content"
     "footer footer";
 }
-header {
+header,
+.todoTitleContainer {
   display: flex;
   align-items: center;
   grid-area: header;
   background-color: #000;
   padding: 2rem;
   color: white;
+  border: 2px solid rgb(255, 255, 255, 0.4);
+}
+.todoTitleContainer {
+  justify-content: center;
 }
 .sideBar {
+  grid-area: sidebar;
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  grid-area: sidebar;
   padding: 2rem;
-  background: #555;
+  background: #000000;
   color: white;
+  border: 2px solid rgb(255, 255, 255, 0.4);
 }
 .addProjectText {
   font-size: clamp(0.5rem, 1.8vw + 0.5rem, 4rem);
@@ -54,15 +61,29 @@ header {
 .addProjectBtn {
   width: fit-content;
 }
+.projectContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+  /* border: 2px solid rgb(255, 255, 255, 0.4); */
+}
 .content {
   grid-area: content;
   background: #f4f4f4;
+  display: flex;
+  flex-direction: column;
+  /* gap: 0.5rem; */
+}
+.addTodoBtnContainer {
+  padding: 0.5rem;
 }
 .footer {
   grid-area: footer;
-  background: #222;
+  background: #000000;
   color: white;
   font-size: 0.8rem;
+  border: 2px solid rgb(255, 255, 255, 0.4);
 }
 .formContainer {
   display: flex;
@@ -76,7 +97,12 @@ header {
   margin-left: 2rem;
   border: 1px solid black;
   animation: popIn 0.25s ease-out;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
+
 .formTitle {
   font-size: clamp(0.5rem, 0.8vw + 0.5rem, 4rem);
 }
@@ -86,16 +112,25 @@ header {
   gap: 5rem;
   padding: 2rem;
 }
+
+.todoForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 2rem;
+}
 .titleInput,
 .dueDateInput,
-.priorityLevel {
+.priorityContainer {
   width: clamp(8rem, 90%, 80rem);
   padding: 2rem;
   font-size: clamp(0.5rem, 0.8vw + 0.5rem, 4rem);
   border-radius: 16px;
   border: 1px solid #ccc;
 }
-
+.priorityContainer {
+  padding: 0.5rem 2rem;
+}
 .titleInput:focus,
 .dueDateInput:focus,
 .priorityLevel:focus {
@@ -122,6 +157,7 @@ button {
   font-weight: 600;
   cursor: pointer;
   border: 1px solid black;
+  transition: all 0.3s ease-in;
 }
 
 .submitBtn,
@@ -133,6 +169,8 @@ button {
 .submitBtn:hover,
 button:hover {
   background: #2563eb;
+  scale: 1.05;
+  border: 0.1rem solid white;
 }
 
 .cancelBtn,
@@ -140,18 +178,32 @@ button:hover {
   background: #ff0101;
 }
 
-.cancelBtn:hover {
+.cancelBtn:hover,
+.deleteBtn:hover {
   background: #ff4949;
+  scale: 1.05;
+
+  border: 0.1rem solid white;
 }
 .projectCard {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0.8rem;
-  background-color: #797777;
+  /* padding-left: 2rem; */
+  background-color: #2563eb;
   border-radius: 13px;
   border: 1px solid black;
-  font-size: clamp(0.5rem, 0.5vw + 1rem, 4rem);
+  font-size: clamp(0.5rem, 1vw + 0.5rem, 4rem);
+  transition: all 0.3s ease-in;
+}
+.projectCard:hover {
+  scale: 1.05;
+  border: 0.2rem solid white;
+}
+.active {
+  scale: 1.05;
+  border: 0.3rem solid rgb(0, 255, 72);
 }
 .projectActions {
   display: flex;
@@ -162,4 +214,77 @@ button:hover {
 .editBtn,
 .deleteBtn {
   padding: 0.4rem;
+}
+.projectCard[data-default="true"] .editBtn,
+.projectCard[data-default="true"] .deleteBtn {
+  display: none;
+}
+.todoGrid {
+  display: grid;
+  place-items: center;
+  /* height: 100%; */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+  width: 100%;
+  border-top: 0.2rem solid rgb(0, 0, 0, 0.4);
+}
+.todoContainer {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in;
+  /* font-size:; */
+}
+
+.todoContainer:hover {
+  scale: 1.05;
+  border: 0.1rem solid white;
+}
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.myCheckbox {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 0.1rem solid #ffffff;
+  outline: none;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+/* Hover effect */
+.myCheckbox:hover {
+  border: 0.1rem solid #ffffff;
+  background-color: #fefefe;
+}
+
+/* Checked state */
+.myCheckbox:checked {
+  background-color: rgb(0, 255, 72);
+  border-color: #fefefe;
+}
+
+/* Checkmark symbol */
+.myCheckbox:checked::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: rgb(0, 0, 0);
+  font-size: 1.5rem;
+  font-weight: bold;
 }
