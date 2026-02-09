@@ -206,10 +206,14 @@ header,
   scale: 1.05;
   border: 0.2rem solid white;
 }
-
+.image {
+  width: 2.5rem;
+  height: 3rem;
+}
 .titleContainer {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.5rem;
 }
 .active {

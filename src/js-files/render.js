@@ -2,6 +2,7 @@ import { loadForm, selectCards, todoCardEvents } from "./events";
 import { storeProjectCard } from "./storage";
 import { getCurrentProject, getProjects, setProjects } from "./todo";
 import { loadProjectForm } from "./ui";
+import file from "./../asset/file.svg";
 
 const handleSubmitForm = (formData) => {
   const projects = getProjects();
@@ -31,10 +32,8 @@ const renderProjectCard = (projectData) => {
 
   projectCard.innerHTML = `
   <div class='titleContainer'>
-    <input 
-      type="checkbox" 
-      class="myCheckbox"
-    >
+    <div 
+    ><img  class="image" src="${file}"></div>
     <p class="projectTitle">${projectData.title}</p>
   </div>
   
@@ -125,11 +124,8 @@ const displayProjects = () => {
     }
 
     projectCard.innerHTML = `
-    <div class='titleContainer'>
-    <input 
-      type="checkbox" 
-      class="myCheckbox"
-    >
+  <div class='titleContainer'>
+    <div><img  class="image" src="${file}"></div>
     <p class="projectTitle">${project.title}</p>
   </div>
   <div class="projectActions">
