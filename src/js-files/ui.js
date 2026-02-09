@@ -1,6 +1,7 @@
 import { displayProjects } from "./render";
 import { storeDefaultProject } from "./storage";
 import { getProjects, currentState } from "./todo";
+import { todoCardEvents } from "./events";
 
 const loadDefaultDOM = () => {
   const content = document.querySelector(".content");
@@ -170,15 +171,20 @@ const displayTodosForProject = (id, todos) => {
 
   if (selected) {
     todoGrid.innerHTML = "";
-    console.log(selected.todos);
+    // console.log(selected.todos);
     selected.todos.forEach((todo) => {
-      const todoContainer = document.createElement("div");
-      todoContainer.classList.add("todoContainer");
-      // if (todo.isCompleted) todoContainer.classList.add("completed");
+      const todoContainer = document.createElement("button");
+      todoContainer.classList.add("todoContainer", "todoCard");
+      todoContainer.dataset.projectid = todo.id;
+      todoContainer.dataset.todoid = todo.todoId;
+
+      if (todo.isCompleted) {
+        todoContainer.classList.add("completed");
+      }
 
       const isCompleted = document.createElement("input");
       isCompleted.type = "checkbox";
-      isCompleted.classList.add("myCheckbox");
+      isCompleted.classList.add("checkbox");
       isCompleted.checked = todo.isCompleted;
 
       const todoTitle = document.createElement("p");
@@ -193,27 +199,31 @@ const displayTodosForProject = (id, todos) => {
       priority.classList.add(`priorityLevel`);
       priority.textContent = todo.priorityLevel;
 
-      const btnContainer = document.createElement("div");
+      const btnContainerTodo = document.createElement("div");
       const editBtn = document.createElement("button");
       const deleteBtn = document.createElement("button");
 
-      btnContainer.classList.add(".btnContainer");
-      editBtn.classList.add(".editBtn");
-      deleteBtn.classList.add(".deleteBtn");
+      btnContainerTodo.classList.add("btnContainerTodo");
+      editBtn.classList.add("editBtn");
+      deleteBtn.classList.add("deleteBtn");
 
-      btnContainer.append(editBtn, deleteBtn);
+      editBtn.textContent = "Edit";
+      deleteBtn.textContent = "X";
+
+      btnContainerTodo.append(editBtn, deleteBtn);
 
       todoContainer.append(
         todoTitle,
         dueDate,
         priority,
         isCompleted,
-        btnContainer
+        btnContainerTodo
       );
 
       todoGrid.append(todoContainer);
     });
   }
+  todoCardEvents();
 };
 
 export {

@@ -1,4 +1,4 @@
-import { loadForm, selectCards } from "./events";
+import { loadForm, selectCards, todoCardEvents } from "./events";
 import { storeProjectCard } from "./storage";
 import { getCurrentProject, getProjects, setProjects } from "./todo";
 import { loadProjectForm } from "./ui";
@@ -30,7 +30,13 @@ const renderProjectCard = (projectData) => {
   if (!projectCard.dataset.id) projectCard.dataset.id = projectData.id;
 
   projectCard.innerHTML = `
-  <p class="projectTitle">${projectData.title}</p>
+  <div class='titleContainer'>
+    <input 
+      type="checkbox" 
+      class="myCheckbox"
+    >
+    <p class="projectTitle">${projectData.title}</p>
+  </div>
   
   <div class="projectActions">
     <button class="editBtn">Edit</button>
@@ -46,15 +52,24 @@ const renderTodoForProject = (currentCard, todoData) => {
   const todoGrid = document.querySelector(".todoGrid");
   const project = getProjects();
   const selected = project.find((p) => p.id === currentCard);
-
+  console.log(todoData);
   if (selected) {
-    const todoContainer = document.createElement("div");
+    const todoContainer = document.createElement("button");
     todoContainer.classList.add("todoContainer");
+    todoContainer.dataset.projectid = todoData.id;
+    todoContainer.dataset.todoid = todoData.todoId;
+
+    const projectId = todoData.id;
+    const todoId = todoData.todoId;
+
+    console.log(projectId);
+    console.log(todoId);
+
     // if (todo.isCompleted) todoContainer.classList.add("completed");
 
     const isCompleted = document.createElement("input");
     isCompleted.type = "checkbox";
-    isCompleted.classList.add("myCheckbox");
+    isCompleted.classList.add("checkbox");
     isCompleted.checked = todoData.isCompleted;
 
     const todoTitle = document.createElement("p");
@@ -69,10 +84,30 @@ const renderTodoForProject = (currentCard, todoData) => {
     priority.classList.add(`priorityLevel`);
     priority.textContent = todoData.priorityLevel;
 
-    todoContainer.append(todoTitle, dueDate, priority, isCompleted);
+    const btnContainerTodo = document.createElement("div");
+    const editBtn = document.createElement("button");
+    const deleteBtn = document.createElement("button");
+
+    editBtn.textContent = "Edit";
+    deleteBtn.textContent = "X";
+
+    btnContainerTodo.classList.add("btnContainerTodo");
+    editBtn.classList.add("editBtn");
+    deleteBtn.classList.add("deleteBtn");
+
+    btnContainerTodo.append(editBtn, deleteBtn);
+
+    todoContainer.append(
+      todoTitle,
+      dueDate,
+      priority,
+      isCompleted,
+      btnContainerTodo
+    );
 
     todoGrid.append(todoContainer);
   }
+  todoCardEvents();
 };
 
 const displayProjects = () => {
@@ -90,12 +125,13 @@ const displayProjects = () => {
     }
 
     projectCard.innerHTML = `
+    <div class='titleContainer'>
     <input 
-    type="checkbox" 
-    class="myCheckbox"
-  >
-  <p class="projectTitle">${project.title}</p>
-  
+      type="checkbox" 
+      class="myCheckbox"
+    >
+    <p class="projectTitle">${project.title}</p>
+  </div>
   <div class="projectActions">
     <button class="editBtn">Edit</button>
     <button class="deleteBtn">X</button>

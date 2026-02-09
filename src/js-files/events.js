@@ -4,7 +4,12 @@ import {
   editProject,
   renderTodoForProject,
 } from "./render";
-import { getCurrentProject, getProjects, setCurrentProject } from "./todo";
+import {
+  getCurrentProject,
+  getProjects,
+  setCurrentProject,
+  deleteTodoFromStorage,
+} from "./todo";
 import {
   loadDefaultDOM,
   loadProjectForm,
@@ -66,8 +71,6 @@ const setupProjectCard = () => {
       const modifiedData = myProjects.filter(
         (p) => p.id !== projectCard.dataset.id
       );
-
-      console.log(modifiedData);
 
       localStorage.setItem("projects", JSON.stringify(modifiedData));
 
@@ -179,13 +182,37 @@ const todoEvent = () => {
     });
   });
 };
+
+const todoCardEvents = () => {
+  const todoGrid = document.querySelector(".todoGrid");
+  todoGrid.addEventListener("click", (e) => {
+    if (e.target.classList.contains("deleteBtn")) {
+      const card = e.target.closest(".todoContainer");
+
+      const todoID = card.dataset.todoid;
+      const projectID = card.dataset.projectid;
+      deleteTodoFromStorage(projectID, todoID);
+      card.remove();
+    }
+  });
+};
+
 const disableAllBtns = () => {
   const projectCard = document.querySelectorAll(".projectCard");
   const addTodoBtn = document.querySelector(".addTodoBtn");
   const addProjectBtn = document.querySelector(".addProjectBtn");
+  const todoCard = document.querySelectorAll(".todoContainer");
+  const editBtn = document.querySelectorAll(".editBtn");
+  const deleteBtn = document.querySelectorAll(".deleteBtn");
+  const myCheckbox = document.querySelectorAll(".checkbox");
 
   projectCard.forEach((card) => {
     card.disabled = true;
+  });
+  todoCard.forEach((card) => {
+    card.disabled = true;
+    editBtn.disabled = true;
+    deleteBtn.disabled = true;
   });
   addTodoBtn.disabled = true;
   addProjectBtn.disabled = true;
@@ -194,12 +221,21 @@ const enableAllBtns = () => {
   const projectCard = document.querySelectorAll(".projectCard");
   const addTodoBtn = document.querySelector(".addTodoBtn");
   const addProjectBtn = document.querySelector(".addProjectBtn");
+  const todoCard = document.querySelectorAll(".todoContainer");
+  const editBtn = document.querySelectorAll(".editBtn");
+  const deleteBtn = document.querySelectorAll(".deleteBtn");
+  const myCheckbox = document.querySelectorAll(".checkbox");
 
   projectCard.forEach((card) => {
     card.disabled = false;
+  });
+  todoCard.forEach((card) => {
+    card.disabled = false;
+    editBtn.disabled = false;
+    deleteBtn.disabled = false;
   });
   addTodoBtn.disabled = false;
   addProjectBtn.disabled = false;
 };
 
-export { loadForm, setupProjectCard, todoEvent, selectCards };
+export { loadForm, setupProjectCard, todoEvent, selectCards, todoCardEvents };

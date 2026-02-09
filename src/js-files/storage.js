@@ -31,7 +31,7 @@ const storeTodoData = (todoData) => {
 };
 
 const getTodosForProject = (id) => {
-  console.log(id);
+  // console.log(id);
   const project = getProjects();
   const todos = project.find((p) => p.id === id);
   if (todos) return todos.todos;
