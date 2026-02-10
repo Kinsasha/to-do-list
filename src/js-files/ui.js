@@ -187,13 +187,22 @@ const displayTodosForProject = (id, todos) => {
       isCompleted.classList.add("checkbox");
       isCompleted.checked = todo.isCompleted;
 
+      const todoTitleContainer = document.createElement("div");
+      todoTitleContainer.classList.add("todoTitleContainer");
+
       const todoTitle = document.createElement("p");
       todoTitle.classList.add("todoTitle");
       todoTitle.textContent = todo.name;
+      todoTitleContainer.append(todoTitle);
 
       const dueDate = document.createElement("span");
-      dueDate.classList.add("dueDate");
-      dueDate.textContent = todo.dueDate;
+      if (todo.dueDate == null) {
+        dueDate.classList.add("dueDate", "noDeadline");
+        dueDate.textContent = "No Deadline";
+      } else {
+        dueDate.classList.add("dueDate");
+        dueDate.textContent = todo.dueDate;
+      }
 
       const priority = document.createElement("div");
       priority.classList.add(`priorityLevel`);
@@ -213,7 +222,7 @@ const displayTodosForProject = (id, todos) => {
       btnContainerTodo.append(editBtn, deleteBtn);
 
       todoContainer.append(
-        todoTitle,
+        todoTitleContainer,
         dueDate,
         priority,
         isCompleted,

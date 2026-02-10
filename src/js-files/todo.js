@@ -28,6 +28,26 @@ const deleteTodoFromStorage = (projectID, todoID) => {
   });
   setProjects(updatedProject);
 };
+
+const toggleTodo = (projectID, todoID, isCompleted) => {
+  const projects = getProjects();
+  const toggle = projects.map((project) => {
+    project.id === projectID;
+
+    if (project) {
+      project.todos.map((todo) => {
+        todo.todoId === todoID;
+
+        if (todo) {
+          {
+            todo.isCompleted = isCompleted;
+            console.log(todo.isCompleted);
+          }
+        }
+      });
+    }
+  });
+};
 export {
   getProjects,
   setProjects,
@@ -35,4 +55,5 @@ export {
   setCurrentProject,
   getCurrentProject,
   deleteTodoFromStorage,
+  toggleTodo,
 };

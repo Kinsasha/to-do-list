@@ -9,6 +9,7 @@ import {
   getProjects,
   setCurrentProject,
   deleteTodoFromStorage,
+  toggleTodo,
 } from "./todo";
 import {
   loadDefaultDOM,
@@ -129,11 +130,7 @@ const todoEvent = () => {
     disableAllBtns();
     submitBtn.addEventListener("click", (e) => {
       e.preventDefault();
-      const finalDate = dueDateInput.value || "No Deadline";
-
-      // if (finalDate === "No Deadline") {
-      //   finalDate.className("noDeadline");
-      // }
+      const finalDate = dueDateInput.value || null;
 
       //safeguards
       const inputDate = new Date(dueDateInput.value);
@@ -153,12 +150,12 @@ const todoEvent = () => {
       }
       let level;
       if (priorityLevel.value <= 33) {
-        level = priorityLevel.value = "Low";
+        level = priorityLevel.value = "Low Priority";
       } else if (priorityLevel.value > 33 && priorityLevel.value <= 66) {
-        level = priorityLevel.value = "Medium";
+        level = priorityLevel.value = "Medium Priority";
       }
-      if (priorityLevel.value > 66 && priorityLevel <= 100) {
-        level = priorityLevel.value = "High";
+      if (priorityLevel.value > 66 && priorityLevel.value <= 100) {
+        level = priorityLevel.value = "High Priority";
       }
 
       const todoData = {
@@ -167,6 +164,7 @@ const todoEvent = () => {
         name: titleInput.value,
         dueDate: finalDate,
         priorityLevel: level,
+        isCompleted: false,
       };
 
       storeTodoData(todoData);
@@ -193,6 +191,25 @@ const todoCardEvents = () => {
       const projectID = card.dataset.projectid;
       deleteTodoFromStorage(projectID, todoID);
       card.remove();
+    }
+  });
+
+  todoGrid.addEventListener("change", (e) => {
+    if (e.target.classList.contains("checkbox")) {
+      const card = e.target.closest(".todoContainer");
+
+      const todoID = card.dataset.todoid;
+      const projectID = card.dataset.projectid;
+
+      const isCompleted = e.target.checked;
+
+      if (isCompleted) {
+        card.classList.add("completed");
+      } else {
+        card.classList.remove("completed");
+      }
+      // console.log(isCompleted);
+      toggleTodo(projectID, todoID, isCompleted);
     }
   });
 };

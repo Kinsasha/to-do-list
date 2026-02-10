@@ -58,26 +58,27 @@ const renderTodoForProject = (currentCard, todoData) => {
     todoContainer.dataset.projectid = todoData.id;
     todoContainer.dataset.todoid = todoData.todoId;
 
-    const projectId = todoData.id;
-    const todoId = todoData.todoId;
-
-    console.log(projectId);
-    console.log(todoId);
-
-    // if (todo.isCompleted) todoContainer.classList.add("completed");
-
     const isCompleted = document.createElement("input");
     isCompleted.type = "checkbox";
     isCompleted.classList.add("checkbox");
     isCompleted.checked = todoData.isCompleted;
 
+    const todoTitleContainer = document.createElement("div");
+    todoTitleContainer.classList.add("todoTitleContainer");
+
     const todoTitle = document.createElement("p");
     todoTitle.classList.add("todoTitle");
     todoTitle.textContent = todoData.name;
+    todoTitleContainer.append(todoTitle);
 
     const dueDate = document.createElement("span");
-    dueDate.classList.add("dueDate");
-    dueDate.textContent = todoData.dueDate;
+    if (todoData.dueDate == null) {
+      dueDate.classList.add("dueDate", "noDeadline");
+      dueDate.textContent = "No Deadline";
+    } else {
+      dueDate.classList.add("dueDate");
+      dueDate.textContent = todoData.dueDate;
+    }
 
     const priority = document.createElement("div");
     priority.classList.add(`priorityLevel`);
@@ -97,7 +98,7 @@ const renderTodoForProject = (currentCard, todoData) => {
     btnContainerTodo.append(editBtn, deleteBtn);
 
     todoContainer.append(
-      todoTitle,
+      todoTitleContainer,
       dueDate,
       priority,
       isCompleted,
@@ -157,8 +158,6 @@ const editProject = () => {
       const updated = myProjects.map((p) =>
         p.id === currentCard ? { ...p, title: editedName } : p
       );
-
-      console.log(updated);
 
       setProjects(updated);
       projectContainer.replaceChildren();
