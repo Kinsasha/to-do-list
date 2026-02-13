@@ -203,7 +203,9 @@ const editTodo = (projectID, todoID) => {
   disableAllBtns();
 
   const card = document.querySelector(".todoContainer");
+  const title = card.querySelector(".todoTitle");
   titleInput.placeholder = "Edit todo";
+  titleInput.value = title.textContent;
   submitBtn.textContent = "Edit Todo";
 
   cancelBtn.addEventListener(
