@@ -6,12 +6,13 @@ import {
   todoEvent,
   selectCards,
 } from "./js-files/events";
-import { handleForm } from "./js-files/render";
+import { selectDefault } from "./js-files/render";
 import { storeDefaultProject } from "./js-files/storage";
 
 const init = () => {
   const { addProjectBtn } = loadDefaultDOM();
   loadSavedCards();
+  selectDefault();
   selectCards();
   loadForm(addProjectBtn);
   todoEvent();

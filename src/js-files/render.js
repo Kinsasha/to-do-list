@@ -1,7 +1,18 @@
-import { loadForm, selectCards, todoCardEvents } from "./events";
-import { storeProjectCard } from "./storage";
-import { getCurrentProject, getProjects, setProjects } from "./todo";
-import { loadProjectForm } from "./ui";
+import {
+  loadForm,
+  selectCards,
+  todoCardEvents,
+  enableAllBtns,
+  disableAllBtns,
+} from "./events";
+import { storeProjectCard, storeEditedTodo } from "./storage";
+import {
+  getCurrentProject,
+  getProjects,
+  setCurrentProject,
+  setProjects,
+} from "./todo";
+import { loadProjectForm, loadTodoForm, displayTodosForProject } from "./ui";
 import file from "./../asset/file.svg";
 
 const handleSubmitForm = (formData) => {
@@ -171,6 +182,94 @@ const editProject = () => {
     }
   });
 };
+
+const editTodo = (projectID, todoID) => {
+  const todoGrid = document.querySelector(".todoGrid");
+  const existingFormContainer = document.querySelector(".todoFormContainer");
+
+  if (existingFormContainer) {
+    existingFormContainer.remove();
+  }
+
+  const {
+    todoFormContainer,
+    todoForm,
+    titleInput,
+    dueDateInput,
+    priorityLevel,
+    submitBtn,
+    cancelBtn,
+  } = loadTodoForm();
+  disableAllBtns();
+
+  const card = document.querySelector(".todoContainer");
+  titleInput.placeholder = "Edit todo";
+  submitBtn.textContent = "Edit Todo";
+
+  cancelBtn.addEventListener(
+    "click",
+    () => {
+      todoForm.reset();
+      todoFormContainer.remove();
+      enableAllBtns();
+    },
+    {
+      once: true,
+    }
+  );
+
+  submitBtn.addEventListener(
+    "click",
+    (e) => {
+      e.preventDefault();
+      const finalDate = dueDateInput.value || null;
+
+      //safeguards
+      const inputDate = new Date(dueDateInput.value);
+      const currentDate = new Date();
+      currentDate.setHours(0, 0, 0, 0);
+      inputDate.setHours(0, 0, 0, 0);
+
+      if (currentDate > inputDate) {
+        alert("You cannot set deadline in the past");
+        dueDateInput.value = "";
+        return;
+      }
+
+      if (titleInput.value === "") {
+        alert("Todo title cannot be empty");
+        return;
+      }
+      let level;
+      if (priorityLevel.value <= 33) {
+        level = priorityLevel.value = "Low Priority";
+      } else if (priorityLevel.value > 33 && priorityLevel.value <= 66) {
+        level = priorityLevel.value = "Medium Priority";
+      }
+      if (priorityLevel.value > 66 && priorityLevel.value <= 100) {
+        level = priorityLevel.value = "High Priority";
+      }
+      //
+
+      const editedData = {
+        id: projectID,
+        todoId: todoID,
+        name: titleInput.value,
+        dueDate: finalDate,
+        priorityLevel: level,
+        isCompleted: false,
+      };
+      storeEditedTodo(projectID, todoID, editedData);
+
+      todoGrid.replaceChildren();
+      displayTodosForProject(projectID);
+
+      todoFormContainer.remove();
+      enableAllBtns();
+    },
+    { once: true }
+  );
+};
 //
 //
 //
@@ -178,15 +277,22 @@ const editProject = () => {
 //
 //
 const selectDefault = () => {
-  const defaultCard = document.querySelector(".defaultProjectCard");
+  document.addEventListener("DOMContentLoaded", () => {
+    const projects = getProjects();
 
-  defaultCard.classList.add("active");
+    const currentCard = projects[0];
+
+    displayTodosForProject(currentCard.id);
+
+    const currentCardDOM = document.querySelector(".projectCard");
+    currentCardDOM.classList.add("active");
+  });
 };
-
 export {
   handleSubmitForm,
   editProject,
   displayProjects,
   selectDefault,
   renderTodoForProject,
+  editTodo,
 };

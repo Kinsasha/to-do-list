@@ -1,11 +1,11 @@
-const getProjects = () => {
+let currentState = { projects: getProjects(), selectedProjectID: null };
+
+function getProjects() {
   return JSON.parse(localStorage.getItem("projects")) || [];
-};
+}
 const setProjects = (data) => {
   return localStorage.setItem("projects", JSON.stringify(data));
 };
-
-let currentState = { projects: getProjects(), selectedProjectID: null };
 
 const setCurrentProject = (id) => {
   currentState.selectedProjectID = id;
@@ -31,22 +31,31 @@ const deleteTodoFromStorage = (projectID, todoID) => {
 
 const toggleTodo = (projectID, todoID, isCompleted) => {
   const projects = getProjects();
-  const toggle = projects.map((project) => {
-    project.id === projectID;
 
-    if (project) {
-      project.todos.map((todo) => {
-        todo.todoId === todoID;
+  // Find the project
+  const project = projects.find((p) => p.id === projectID);
 
-        if (todo) {
-          {
-            todo.isCompleted = isCompleted;
-            console.log(todo.isCompleted);
-          }
-        }
-      });
-    }
-  });
+  if (!project) {
+    console.error("Project not found");
+    return;
+  }
+
+  // Find the todo within that project
+  const todo = project.todos.find((t) => t.todoId === todoID);
+
+  console.log(todoID);
+  console.log(todo);
+
+  if (!todo) {
+    console.error("Todo not found");
+    return;
+  }
+
+  // Update the todo's completion status
+  todo.isCompleted = isCompleted;
+
+  // Save back to storage
+  setProjects(projects);
 };
 export {
   getProjects,

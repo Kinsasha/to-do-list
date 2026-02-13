@@ -3,6 +3,7 @@ import {
   handleSubmitForm,
   editProject,
   renderTodoForProject,
+  editTodo,
 } from "./render";
 import {
   getCurrentProject,
@@ -157,7 +158,7 @@ const todoEvent = () => {
       if (priorityLevel.value > 66 && priorityLevel.value <= 100) {
         level = priorityLevel.value = "High Priority";
       }
-
+      //
       const todoData = {
         id: currentCard,
         todoId: crypto.randomUUID(),
@@ -191,6 +192,14 @@ const todoCardEvents = () => {
       const projectID = card.dataset.projectid;
       deleteTodoFromStorage(projectID, todoID);
       card.remove();
+    }
+    if (e.target.classList.contains("editBtn")) {
+      const card = e.target.closest(".todoContainer");
+
+      const todoID = card.dataset.todoid;
+      const projectID = card.dataset.projectid;
+
+      editTodo(projectID, todoID);
     }
   });
 
@@ -255,4 +264,12 @@ const enableAllBtns = () => {
   addProjectBtn.disabled = false;
 };
 
-export { loadForm, setupProjectCard, todoEvent, selectCards, todoCardEvents };
+export {
+  loadForm,
+  setupProjectCard,
+  todoEvent,
+  selectCards,
+  todoCardEvents,
+  disableAllBtns,
+  enableAllBtns,
+};

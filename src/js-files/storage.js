@@ -4,7 +4,7 @@ import { getProjects, setProjects, currentState } from "./todo";
 const storeDefaultProject = () => {
   const projects = currentState.projects;
 
-  const existingProject = currentState.projects.find((p) => p.id === `No.1`);
+  const existingProject = projects.find((p) => p.id === `No.1`);
 
   const defaultData = {
     title: `DEFAULT`,
@@ -12,16 +12,16 @@ const storeDefaultProject = () => {
     todos: existingProject?.todos ?? [],
   };
   if (!existingProject) {
-    currentState.projects.push(defaultData);
-    setProjects(currentState.projects);
+    projects.push(defaultData);
+    setProjects(projects);
   }
 };
 
 const storeProjectCard = (projectData) => {
-  // let project = getProjects();
+  let projects = getProjects();
 
-  currentState.projects.push(projectData);
-  setProjects(currentState.projects);
+  projects.push(projectData);
+  setProjects(projects);
 };
 const storeTodoData = (todoData) => {
   const project = getProjects();
@@ -36,9 +36,29 @@ const getTodosForProject = (id) => {
   const todos = project.find((p) => p.id === id);
   if (todos) return todos.todos;
 };
+const storeEditedTodo = (projectID, todoID, editedData) => {
+  const updatedprojects = getProjects().map((project) => {
+    project.id === projectID;
+
+    return {
+      ...project,
+      todos: project.todos.map((todo) => {
+        if (todo.todoId === todoID) {
+          return { ...todo, ...editedData };
+        } else {
+          return todo;
+        }
+      }),
+    };
+  });
+  console.log(updatedprojects);
+
+  setProjects(updatedprojects);
+};
 export {
   storeProjectCard,
   storeDefaultProject,
   storeTodoData,
   getTodosForProject,
+  storeEditedTodo,
 };

@@ -102,7 +102,7 @@ const loadTodoForm = () => {
   titleContainer.classList.add("titleContainer");
   titleInput.classList.add("titleInput");
   titleInput.type = "text";
-  titleInput.placeholder = "Project title";
+  titleInput.placeholder = "Todo title";
   titleContainer.append(titleInput);
 
   const dueDateContainer = document.createElement("div");
@@ -164,7 +164,7 @@ const loadSavedCards = () => {
   if (savedCards) displayProjects();
 };
 
-const displayTodosForProject = (id, todos) => {
+const displayTodosForProject = (id) => {
   const todoGrid = document.querySelector(".todoGrid");
   const savedTodos = getProjects();
   const selected = savedTodos.find((p) => p.id === id);
