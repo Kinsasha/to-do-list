@@ -8,6 +8,7 @@ import {
 } from "./js-files/events";
 import { selectDefault } from "./js-files/render";
 import { storeDefaultProject } from "./js-files/storage";
+import { handleSideBarState } from "./js-files/todo";
 
 const init = () => {
   const { addProjectBtn } = loadDefaultDOM();
@@ -17,6 +18,7 @@ const init = () => {
   loadForm(addProjectBtn);
   todoEvent();
   setupProjectCard();
+  handleSideBarState();
 };
 
 init();

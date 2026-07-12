@@ -9,7 +9,6 @@ const setProjects = (data) => {
 
 const setCurrentProject = (id) => {
   currentState.selectedProjectID = id;
-  // console.log("Current project is now:", currentState.selectedProjectID);
 };
 const getCurrentProject = () => {
   return currentState.selectedProjectID;
@@ -32,7 +31,6 @@ const deleteTodoFromStorage = (projectID, todoID) => {
 const toggleTodo = (projectID, todoID, isCompleted) => {
   const projects = getProjects();
 
-  // Find the project
   const project = projects.find((p) => p.id === projectID);
 
   if (!project) {
@@ -40,22 +38,25 @@ const toggleTodo = (projectID, todoID, isCompleted) => {
     return;
   }
 
-  // Find the todo within that project
   const todo = project.todos.find((t) => t.todoId === todoID);
-
-  console.log(todoID);
-  console.log(todo);
 
   if (!todo) {
     console.error("Todo not found");
     return;
   }
 
-  // Update the todo's completion status
   todo.isCompleted = isCompleted;
 
-  // Save back to storage
   setProjects(projects);
+};
+
+const handleSideBarState = () => {
+  const sideBar = document.querySelector(".sideBar");
+  const sideBarClass = localStorage.getItem("sideBarState");
+
+  sideBarClass === "true"
+    ? sideBar.classList.add("collapsed")
+    : sideBar.classList.remove("collapsed");
 };
 export {
   getProjects,
@@ -65,4 +66,5 @@ export {
   getCurrentProject,
   deleteTodoFromStorage,
   toggleTodo,
+  handleSideBarState,
 };

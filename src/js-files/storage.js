@@ -17,6 +17,10 @@ const storeDefaultProject = () => {
   }
 };
 
+// const storeSideBarState = () => {
+
+// }
+
 const storeProjectCard = (projectData) => {
   let projects = getProjects();
 
@@ -31,7 +35,6 @@ const storeTodoData = (todoData) => {
 };
 
 const getTodosForProject = (id) => {
-  // console.log(id);
   const project = getProjects();
   const todos = project.find((p) => p.id === id);
   if (todos) return todos.todos;
@@ -51,7 +54,6 @@ const storeEditedTodo = (projectID, todoID, editedData) => {
       }),
     };
   });
-  console.log(updatedprojects);
 
   setProjects(updatedprojects);
 };

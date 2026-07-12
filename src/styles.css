@@ -19,19 +19,18 @@ body {
 
 .layout {
   height: 100vh;
-  display: grid;
+  /* display: grid;
 
-  /* Rows: header (25%), main (auto), footer (small) */
   grid-template-rows: 10% 1fr 5%;
 
-  /* Columns: sidebar (25%), content (75%) */
   grid-template-columns: 25% 75%;
 
   grid-template-areas:
     "header header"
     "sidebar content"
-    "footer footer";
+    "footer footer"; */
 }
+
 header,
 .heroTitleContainer {
   display: flex;
@@ -50,10 +49,44 @@ header,
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  padding: 2rem;
+  padding: 1rem;
   background: #000000;
   color: white;
   border: 2px solid rgb(255, 255, 255, 0.4);
+}
+.sideBar.collapsed {
+  grid-area: auto;
+  width: 100px;
+
+  .projectCard {
+    display: none;
+  }
+}
+.content {
+  grid-area: content;
+  background: rgb(160, 161, 162);
+  display: flex;
+  flex-direction: column;
+  /* gap: 0.5rem; */
+}
+.todoGrid {
+  display: grid;
+  /* place-items: center; */
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  padding: 1rem;
+  width: 100%;
+  border-top: 0.2rem solid rgb(0, 0, 0, 0.4);
+}
+/* body */
+.addProjectContainer {
+  display: flex;
+  justify-content: space-between;
+
+  button {
+    /* padding: 1rem; */
+    background: transparent;
+  }
 }
 .addProjectText {
   font-size: clamp(0.5rem, 1.8vw + 0.5rem, 4rem);
@@ -67,13 +100,6 @@ header,
   gap: 2rem;
   width: 100%;
   /* border: 2px solid rgb(255, 255, 255, 0.4); */
-}
-.content {
-  grid-area: content;
-  background: rgb(160, 161, 162);
-  display: flex;
-  flex-direction: column;
-  /* gap: 0.5rem; */
 }
 .addTodoBtnContainer {
   padding: 0.5rem;
@@ -235,15 +261,6 @@ header,
 .projectCard[data-default="true"] .deleteBtn {
   display: none;
 }
-.todoGrid {
-  display: grid;
-  /* place-items: center; */
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  padding: 1rem;
-  width: 100%;
-  border-top: 0.2rem solid rgb(0, 0, 0, 0.4);
-}
 .todoContainer {
   background-color: #ffffff;
   border: 1px solid #ddd;
@@ -350,4 +367,11 @@ header,
   text-align: justify;
   justify-self: center;
   margin-top: 0.7rem;
+}
+
+@media (max-width: 600px) {
+  .layout {
+    display: flex;
+    flex-direction: column;
+  }
 }

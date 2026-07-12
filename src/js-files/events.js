@@ -64,6 +64,7 @@ const loadForm = (btn) => {
 const setupProjectCard = () => {
   const sideBar = document.querySelector(".sideBar");
   const todoGrid = document.querySelector(".todoGrid");
+  const addProjectToggle = document.querySelector(".addProjectToggle");
 
   sideBar.addEventListener("click", (e) => {
     if (e.target.classList.contains("deleteBtn")) {
@@ -85,6 +86,14 @@ const setupProjectCard = () => {
 
       editProject(projectCard);
     }
+  });
+  addProjectToggle.addEventListener("click", () => {
+    const isCollapsed = sideBar.classList.toggle("collapsed");
+
+    localStorage.setItem("sideBarState", isCollapsed);
+
+    console.log(isCollapsed);
+    console.log(sideBar);
   });
 };
 

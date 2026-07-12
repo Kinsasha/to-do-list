@@ -2,12 +2,14 @@ import { displayProjects } from "./render";
 import { storeDefaultProject } from "./storage";
 import { getProjects, currentState } from "./todo";
 import { todoCardEvents } from "./events";
+import menuToggle from "./../asset/menuToggle.svg";
 
 const loadDefaultDOM = () => {
   const content = document.querySelector(".content");
   const sideBar = document.querySelector(".sideBar");
   const header = document.querySelector(".heroText");
 
+  const addProjectContainer = document.createElement("div");
   const addProjectText = document.createElement("div");
   const addProjectBtn = document.createElement("button");
   const projectContainer = document.createElement("div");
@@ -16,11 +18,18 @@ const loadDefaultDOM = () => {
   const addTodoBtnContainer = document.createElement("div");
   const todoGrid = document.createElement("div");
 
+  const addProjectToggle = document.createElement("button");
+  addProjectToggle.classList.add("addProjectToggle");
+  const icon = document.createElement("img");
+  icon.src = menuToggle;
+
+  addProjectToggle.appendChild(icon);
   addTodoBtn.textContent = `Add Todo`;
   addTodoBtnContainer.classList.add("addTodoBtnContainer");
   addTodoBtn.classList.add("addTodoBtn");
   todoGrid.classList.add("todoGrid");
 
+  addProjectContainer.classList.add("addProjectContainer");
   addProjectText.classList.add("addProjectText");
   addProjectBtn.classList.add("addProjectBtn");
   projectContainer.classList.add("projectContainer");
@@ -28,7 +37,8 @@ const loadDefaultDOM = () => {
   addProjectText.textContent = `Projects`;
   addProjectBtn.textContent = `Add a Project`;
 
-  sideBar.append(addProjectText, addProjectBtn, projectContainer);
+  addProjectContainer.append(addProjectText, addProjectToggle);
+  sideBar.append(addProjectContainer, addProjectBtn, projectContainer);
 
   addTodoBtnContainer.append(addTodoBtn);
   content.append(addTodoBtnContainer, todoGrid);
