@@ -7,7 +7,7 @@ import menuToggle from "./../asset/menuToggle.svg";
 const loadDefaultDOM = () => {
   const content = document.querySelector(".content");
   const sideBar = document.querySelector(".sideBar");
-  const header = document.querySelector(".heroText");
+  const header = document.querySelector(".header");
 
   const addProjectContainer = document.createElement("div");
   const addProjectText = document.createElement("div");
@@ -37,10 +37,11 @@ const loadDefaultDOM = () => {
   addProjectText.textContent = `Projects`;
   addProjectBtn.textContent = `Add a Project`;
 
-  addProjectContainer.append(addProjectText, addProjectToggle);
-  sideBar.append(addProjectContainer, addProjectBtn, projectContainer);
+  addProjectContainer.append(addProjectToggle);
+  sideBar.append(addProjectText, addProjectBtn, projectContainer);
 
   addTodoBtnContainer.append(addTodoBtn);
+  header.prepend(addProjectContainer);
   content.append(addTodoBtnContainer, todoGrid);
 
   storeDefaultProject();
